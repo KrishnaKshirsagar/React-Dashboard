@@ -1,0 +1,13 @@
+.activeRoute {
+  background-color: rgba(0, 0, 0, 0.08);
+  border-left: 3px solid #1976d2;
+}
+
+.activeRoute .MuiListItemIcon-root {
+  color: #1976d2;
+}
+
+.activeRoute .MuiListItemText-primary {
+  color: #1976d2;
+  font-weight: 500;
+}
