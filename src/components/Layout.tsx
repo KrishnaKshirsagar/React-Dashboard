@@ -49,7 +49,7 @@ const darkTheme = createTheme({
   },
 });
 
-const Dashboard: React.FC = () => {
+const Layout: React.FC = () => {
   const [open, setOpen] = React.useState(true);
   const [isDarkMode, setIsDarkMode] = React.useState(false);
 
@@ -89,4 +89,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default Layout;

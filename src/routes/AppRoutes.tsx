@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import { useRoutes } from "react-router-dom";
-import Dashboard from "../components/Dashboard";
+import Layout from "../components/Layout";
 import Login from "../pages/LoginPage";
 // Lazy-loaded child pages
 const HomePage = lazy(() => import("../pages/HomePage"));
@@ -19,7 +19,7 @@ const routes = [
   },
   {
     path: "/dashboard",
-    element: <Dashboard />,
+    element: <Layout />,
     children: [
       {
         index: true,
@@ -29,7 +29,7 @@ const routes = [
   },
   {
     path: "/analytics",
-    element: <Dashboard />,
+    element: <Layout />,
     children: [
       {
         index: true,
