@@ -1,7 +1,10 @@
 import React, { Suspense, lazy } from "react";
 import { useRoutes } from "react-router-dom";
 import Layout from "../components/Layout";
-import Login from "../pages/LoginPage";
+import Login from "../pages/Auth/LoginPage";
+import ForgotPassword from "../pages/Auth/ForgotPasswordPage";
+import AuthLayout from "../components/AuthLayout/AuthLayout";
+import ResetPassword from "../pages/Auth/ResetPassword";
 // Lazy-loaded child pages
 const HomePage = lazy(() => import("../pages/HomePage"));
 const AnalyticsPage = lazy(() => import("../pages/AnalyticsPage"));
@@ -15,7 +18,25 @@ const withSuspense = (Component: React.LazyExoticComponent<React.FC>) => (
 const routes = [
   {
     path: "/",
-    element: <Login />,
+    element: <AuthLayout />,
+    children: [
+      {
+        index: true,
+        element: <Login />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "reset-password",
+        element: <ResetPassword />,
+      },
+    ],
   },
   {
     path: "/dashboard",
