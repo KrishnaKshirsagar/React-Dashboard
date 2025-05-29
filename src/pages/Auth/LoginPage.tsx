@@ -3,6 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../../components/AuthLayout/AuthLayout.module.css";
+import { useLoginMutation } from "../../store/slices/authSlice";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -19,12 +20,18 @@ const LoginPage: React.FC = () => {
     password: Yup.string().required("Required"),
   });
 
-  const onSubmit = (values: typeof initialValues) => {
-    // Simulate API call
-    console.log("Form data", values);
-    // Simulate successful login
-    localStorage.setItem("userToken", "fake-token");
-    navigate("/dashboard"); // Redirect to dashboard or home page
+  const [login, { isLoading, error }] = useLoginMutation();
+
+  const onSubmit = async (values: typeof initialValues) => {
+    try {
+      await login({
+        mobile_number: values.mobile,
+        password: values.password,
+      }).unwrap();
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
   };
 
   return (
@@ -37,6 +44,9 @@ const LoginPage: React.FC = () => {
       >
         {() => (
           <Form>
+            {error && (
+              <div className={styles.errorMessage}>{error as string}</div>
+            )}
             <div className={styles.formGroup}>
               <label htmlFor="mobile">Mobile Number</label>
               <Field name="mobile" type="tel" className={styles.formControl} />
@@ -61,8 +71,12 @@ const LoginPage: React.FC = () => {
               />
             </div>
 
-            <button type="submit" className={styles.submitButton}>
-              Log In
+            <button
+              type="submit"
+              className={styles.submitButton}
+              disabled={isLoading}
+            >
+              {isLoading ? "Logging in..." : "Log In"}
             </button>
           </Form>
         )}

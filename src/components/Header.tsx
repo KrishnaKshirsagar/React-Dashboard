@@ -4,7 +4,6 @@ import MuiAppBar, {
   type AppBarProps as MuiAppBarProps,
 } from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-// import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
@@ -15,6 +14,7 @@ import {
 } from "@mui/icons-material";
 import { Box, Menu, MenuItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useLogoutMutation } from "../store/slices/authSlice";
 
 const drawerWidth = 240;
 
@@ -63,66 +63,74 @@ const Header: React.FC<HeaderProps> = ({
     setAnchorEl(null);
   };
 
-  const handleLogout = () => {
-    // Add your logout logic here
-    console.log("Logout clicked");
-    handleClose();
-    // localStorage.removeItem("userToken");
-    navigate("/");
+  //const [logout, { isLoading, error }] = useLogoutMutation();
+  const [logout] = useLogoutMutation();
+
+  const handleLogout = async () => {
+    try {
+      handleClose();
+      await logout().unwrap();
+      navigate("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
+
   return (
-    <StyledAppBar position="fixed" open={open}>
-      <Toolbar>
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          onClick={handleDrawerOpen}
-          edge="start"
-          sx={{ marginRight: 5, ...(open && { display: "none" }) }}
-        >
-          <MenuIcon />
-        </IconButton>
-        {/* <Typography variant="h6" noWrap component="div">
-          Dashboard
-        </Typography> */}
-        <Box sx={{ flexGrow: 1 }} />
-        <IconButton sx={{ ml: 1 }} onClick={toggleTheme} color="inherit">
-          {isDarkMode ? <Brightness7 /> : <Brightness4 />}
-        </IconButton>
-        <div>
+    <>
+      <StyledAppBar position="fixed" open={open}>
+        <Toolbar>
           <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls="menu-appbar"
-            aria-haspopup="true"
-            onClick={handleMenu}
             color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{ marginRight: 5, ...(open && { display: "none" }) }}
           >
-            <AccountCircle />
+            <MenuIcon />
           </IconButton>
-          <Menu
-            id="menu-appbar"
-            anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleLogout}>
-              <Logout fontSize="small" sx={{ mr: 1 }} /> Logout
-            </MenuItem>
-          </Menu>
-        </div>
-      </Toolbar>
-    </StyledAppBar>
+          {/* <Typography variant="h6" noWrap component="div">
+        Dashboard
+      </Typography> */}
+          <Box sx={{ flexGrow: 1 }} />
+          <IconButton sx={{ ml: 1 }} onClick={toggleTheme} color="inherit">
+            {isDarkMode ? <Brightness7 /> : <Brightness4 />}
+          </IconButton>
+          <div>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleMenu}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleClose}>Profile</MenuItem>
+              <MenuItem onClick={handleLogout}>
+                <Logout fontSize="small" sx={{ mr: 1 }} /> Logout
+              </MenuItem>
+            </Menu>
+          </div>
+        </Toolbar>
+      </StyledAppBar>
+    </>
   );
 };
 

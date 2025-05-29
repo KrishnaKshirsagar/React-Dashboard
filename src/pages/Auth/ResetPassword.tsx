@@ -3,21 +3,19 @@ import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import styles from "../../components/AuthLayout/AuthLayout.module.css";
-
-interface ResetPasswordValues {
-  mobile: string;
-  password: string;
-  confirmPassword: string;
-}
+import type { ResetPasswordRequest } from "../../interfaces/auth";
 
 const ResetPasswordSchema = Yup.object().shape({
-  mobile: Yup.string()
+  otp: Yup.string()
+    .required("OTP is required")
+    .matches(/^[0-9]{4}$/, "OTP must be exactly 4 digits"),
+  mobile_number: Yup.string()
     .required("Mobile number is required")
     .matches(/^\d{10}$/, "Mobile number must be exactly 10 digits"),
   password: Yup.string()
     .required("Password is required")
     .min(8, "Password must be at least 8 characters"),
-  confirmPassword: Yup.string()
+  confirm_password: Yup.string()
     .required("Confirm password is required")
     .oneOf([Yup.ref("password")], "Passwords must match"),
 });
@@ -25,15 +23,23 @@ const ResetPasswordSchema = Yup.object().shape({
 const ResetPassword: React.FC = () => {
   const navigate = useNavigate();
 
-  const initialValues: ResetPasswordValues = {
-    mobile: "",
+  const initialValues: ResetPasswordRequest = {
+    mobile_number: "",
+    otp: "",
     password: "",
-    confirmPassword: "",
+    confirm_password: "",
   };
 
-  const handleSubmit = (values: ResetPasswordValues) => {
+  const handleSubmit = (values: ResetPasswordRequest) => {
+    // Remove confirm_password before making API call
+    const apiPayload = {
+      mobile_number: values.mobile_number,
+      otp: values.otp,
+      password: values.password,
+    };
     // TODO: Implement API call to reset password
     console.log("Form submitted:", values);
+    console.log("API payload:", apiPayload);
     alert("Password reset successfully");
     navigate("/login");
   };
@@ -49,15 +55,30 @@ const ResetPassword: React.FC = () => {
         {({ isSubmitting }) => (
           <Form>
             <div className={styles.formGroup}>
-              <label htmlFor="mobile">Mobile Number</label>
+              <label htmlFor="mobile_number">Mobile Number</label>
               <Field
                 type="tel"
-                name="mobile"
+                name="mobile_number"
                 placeholder="Enter mobile number"
                 className={styles.formControl}
               />
               <ErrorMessage
-                name="mobile"
+                name="mobile_number"
+                component="div"
+                className={styles.errorMessage}
+              />
+            </div>
+
+            <div className={styles.formGroup}>
+              <label htmlFor="otp">OTP</label>
+              <Field
+                type="text"
+                name="otp"
+                placeholder="Enter OTP"
+                className={styles.formControl}
+              />
+              <ErrorMessage
+                name="otp"
                 component="div"
                 className={styles.errorMessage}
               />
@@ -79,15 +100,15 @@ const ResetPassword: React.FC = () => {
             </div>
 
             <div className={styles.formGroup}>
-              <label htmlFor="confirmPassword">Confirm Password</label>
+              <label htmlFor="confirm_password">Confirm Password</label>
               <Field
                 type="password"
-                name="confirmPassword"
+                name="confirm_password"
                 placeholder="Confirm new password"
                 className={styles.formControl}
               />
               <ErrorMessage
-                name="confirmPassword"
+                name="confirm_password"
                 component="div"
                 className={styles.errorMessage}
               />
