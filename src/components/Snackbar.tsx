@@ -1,14 +1,19 @@
-import React, { useEffect } from 'react';
-import { Alert, Snackbar as MuiSnackbar } from '@mui/material';
+import React, { useEffect } from "react";
+import { Alert, Snackbar as MuiSnackbar } from "@mui/material";
 
 interface SnackbarProps {
   open: boolean;
   message: string;
-  severity: 'success' | 'error' | 'info' | 'warning';
+  severity: "success" | "error" | "info" | "warning";
   onClose: () => void;
 }
 
-const Snackbar: React.FC<SnackbarProps> = ({ open, message, severity, onClose }) => {
+const Snackbar: React.FC<SnackbarProps> = ({
+  open,
+  message,
+  severity,
+  onClose,
+}) => {
   useEffect(() => {
     if (open) {
       const timer = setTimeout(() => {
@@ -24,7 +29,7 @@ const Snackbar: React.FC<SnackbarProps> = ({ open, message, severity, onClose })
       open={open}
       autoHideDuration={5000}
       onClose={onClose}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      anchorOrigin={{ vertical: "top", horizontal: "center" }}
     >
       <Alert severity={severity} onClose={onClose}>
         {message}

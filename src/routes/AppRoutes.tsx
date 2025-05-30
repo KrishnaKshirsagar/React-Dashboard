@@ -1,19 +1,24 @@
-import React, { Suspense, lazy } from "react";
-import { useRoutes } from "react-router-dom";
-import Layout from "../components/Layout";
-import Login from "../pages/Auth/LoginPage";
-import ForgotPassword from "../pages/Auth/ForgotPasswordPage";
-import AuthLayout from "../components/AuthLayout/AuthLayout";
-import ResetPassword from "../pages/Auth/ResetPassword";
-// Lazy-loaded child pages
-const HomePage = lazy(() => import("../pages/HomePage"));
-const AnalyticsPage = lazy(() => import("../pages/AnalyticsPage"));
+import React, { lazy } from "react";
+// import React, { Suspense, lazy } from "react";
 
-const withSuspense = (Component: React.LazyExoticComponent<React.FC>) => (
-  <Suspense fallback={<div>Loading...</div>}>
-    <Component />
-  </Suspense>
-);
+import { useRoutes } from "react-router-dom";
+// import Loader from "../components/Loader";
+import Login from "../pages/Auth/LoginPage";
+import AuthLayout from "../components/AuthLayout/AuthLayout";
+//import Layout from "../components/Layout";
+// Lazy-loaded child pages
+// const LoginPage = lazy(() => import("../pages/Auth/LoginPage"));
+// const AuthLayout = lazy(() => import("../components/AuthLayout/AuthLayout"));
+const Layout = lazy(() => import("../components/Layout"));
+const ForgotPassword = lazy(() => import("../pages/Auth/ForgotPasswordPage"));
+const ResetPassword = lazy(() => import("../pages/Auth/ResetPassword"));
+const HomePage = lazy(() => import("../pages/HomePage"));
+const Orders = lazy(() => import("../pages/OrderManagement/Orders"));
+// const withSuspense = (Component: React.LazyExoticComponent<React.FC>) => (
+//   <Suspense fallback={<Loader />}>
+//     <Component />
+//   </Suspense>
+// );
 
 const routes = [
   {
@@ -44,17 +49,17 @@ const routes = [
     children: [
       {
         index: true,
-        element: withSuspense(HomePage),
+        element: <HomePage />,
       },
     ],
   },
   {
-    path: "/analytics",
+    path: "/orders",
     element: <Layout />,
     children: [
       {
         index: true,
-        element: withSuspense(AnalyticsPage),
+        element: <Orders />,
       },
     ],
   },

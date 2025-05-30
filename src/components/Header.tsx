@@ -6,6 +6,9 @@ import MuiAppBar, {
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+// import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+
 import {
   Brightness4,
   Brightness7,
@@ -43,6 +46,7 @@ const StyledAppBar = styled(MuiAppBar, {
 interface HeaderProps {
   open: boolean;
   handleDrawerOpen: () => void;
+  handleDrawerClose: () => void;
   toggleTheme: () => void;
   isDarkMode: boolean;
 }
@@ -85,9 +89,9 @@ const Header: React.FC<HeaderProps> = ({
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
-            sx={{ marginRight: 5, ...(open && { display: "none" }) }}
+            sx={{ marginRight: 5 }}
           >
-            <MenuIcon />
+            {open ? <ChevronLeftIcon /> : <MenuIcon />}
           </IconButton>
           {/* <Typography variant="h6" noWrap component="div">
         Dashboard

@@ -58,11 +58,11 @@ const Layout: React.FC = () => {
   };
 
   const handleDrawerOpen = () => {
-    setOpen(!open); // Toggle open state
+    setOpen((open) => !open);
   };
 
   const handleDrawerClose = () => {
-    setOpen(false);
+    setOpen((open) => !open);
   };
 
   return (
@@ -72,12 +72,13 @@ const Layout: React.FC = () => {
         <Header
           open={open}
           handleDrawerOpen={handleDrawerOpen}
+          handleDrawerClose={handleDrawerClose}
           toggleTheme={toggleTheme}
           isDarkMode={isDarkMode}
         />
         <Sidebar
           open={open}
-          handleDrawerClose={handleDrawerClose}
+          // handleDrawerClose={handleDrawerClose}
           // You might want to pass isDarkMode to Sidebar if it also needs to adapt its style
         />
         <Main open={open} drawerwidth={drawerWidth}>

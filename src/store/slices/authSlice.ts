@@ -7,6 +7,8 @@ import {
 import {
   type LoginCredentials,
   type AuthResponse,
+  type messageResponse,
+  type ResetPasswordRequest,
 } from "../../interfaces/auth";
 
 export const authApi = createApi({
@@ -61,11 +63,47 @@ export const authApi = createApi({
       },
       invalidatesTags: ["Auth"],
     }),
+    forgotPassword: builder.mutation<
+      messageResponse,
+      { mobile_number: string }
+    >({
+      query: (request) => ({
+        url: "/forgot_password",
+        method: "POST",
+        body: request,
+      }),
+      transformErrorResponse: (error: FetchBaseQueryError) => {
+        console.log("error Api call--", error);
+        return (
+          (error?.data as { message?: string })?.message ??
+          "An error occurred while sending password reset request. Please try again."
+        );
+      },
+    }),
+    resetPassword: builder.mutation<messageResponse, ResetPasswordRequest>({
+      query: (request) => ({
+        url: "/reset_password",
+        method: "POST",
+        body: request,
+      }),
+      transformErrorResponse: (error: FetchBaseQueryError) => {
+        console.log("error Api call--", error);
+        return (
+          (error?.data as { message?: string })?.message ??
+          "An error occurred while resetting password. Please try again."
+        );
+      },
+    }),
   }),
 });
 
 // Export hooks for usage in functional components
-export const { useLoginMutation, useLogoutMutation } = authApi;
+export const {
+  useLoginMutation,
+  useLogoutMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
+} = authApi;
 
 // Export reducer and middleware
 export const authReducer = authApi.reducer;

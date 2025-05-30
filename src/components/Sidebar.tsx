@@ -8,10 +8,10 @@ import {
 import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import HomeIcon from "@mui/icons-material/Home";
-import AnalyticsIcon from "@mui/icons-material/Analytics";
+// import AnalyticsIcon from "@mui/icons-material/Analytics";
+import MoneyOffCsredRounded from "@mui/icons-material/MoneyOffCsredRounded";
+
 import { Link } from "react-router-dom";
 import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import logo from "/m-logo.png";
@@ -67,11 +67,35 @@ const StyledDrawer = styled(MuiDrawer, {
 
 interface SidebarProps {
   open: boolean;
-  handleDrawerClose: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
-  const theme = useTheme(); // Added useTheme hook
+interface NavigationItem {
+  path: string;
+  label: string;
+  icon: React.ElementType;
+}
+
+const navigationItems: NavigationItem[] = [
+  {
+    path: "/dashboard",
+    label: "Home",
+    icon: HomeIcon,
+  },
+  // {
+  //   path: "/analytics",
+  //   label: "Analytics",
+  //   icon: AnalyticsIcon,
+  // },
+  {
+    path: "/orders",
+    label: "Orders",
+    icon: MoneyOffCsredRounded,
+  },
+];
+
+const Sidebar: React.FC<SidebarProps> = ({ open }) => {
+  const theme = useTheme();
+
   return (
     <StyledDrawer variant="permanent" open={open}>
       <DrawerHeader>
@@ -86,52 +110,35 @@ const Sidebar: React.FC<SidebarProps> = ({ open, handleDrawerClose }) => {
             }}
           />
         )}
-        <IconButton onClick={handleDrawerClose}>
+        {/* <IconButton onClick={handleDrawerClose}>
           <ChevronLeftIcon />
-        </IconButton>
+        </IconButton> */}
       </DrawerHeader>
       <Divider />
       <List>
-        <ListItemButton
-          component={Link}
-          to="/dashboard"
-          sx={{
-            minHeight: 48,
-            justifyContent: open ? "initial" : "center",
-            px: 2.5,
-          }}
-        >
-          <ListItemIcon
+        {navigationItems.map((item) => (
+          <ListItemButton
+            key={item.path}
+            component={Link}
+            to={item.path}
             sx={{
-              minWidth: 0,
-              mr: open ? 3 : "auto",
-              justifyContent: "center",
+              minHeight: 48,
+              justifyContent: open ? "initial" : "center",
+              px: 2.5,
             }}
           >
-            <HomeIcon />
-          </ListItemIcon>
-          <ListItemText primary="Home" sx={{ opacity: open ? 1 : 0 }} />
-        </ListItemButton>
-        <ListItemButton
-          component={Link}
-          to="/analytics"
-          sx={{
-            minHeight: 48,
-            justifyContent: open ? "initial" : "center",
-            px: 2.5,
-          }}
-        >
-          <ListItemIcon
-            sx={{
-              minWidth: 0,
-              mr: open ? 3 : "auto",
-              justifyContent: "center",
-            }}
-          >
-            <AnalyticsIcon />
-          </ListItemIcon>
-          <ListItemText primary="Analytics" sx={{ opacity: open ? 1 : 0 }} />
-        </ListItemButton>
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: open ? 3 : "auto",
+                justifyContent: "center",
+              }}
+            >
+              <item.icon />
+            </ListItemIcon>
+            <ListItemText primary={item.label} sx={{ opacity: open ? 1 : 0 }} />
+          </ListItemButton>
+        ))}
       </List>
     </StyledDrawer>
   );

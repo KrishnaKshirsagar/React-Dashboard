@@ -20,6 +20,6 @@ export interface ResetPasswordRequest {
   confirm_password?: string;
 }
 
-export interface ResetPasswordResponse {
+export interface messageResponse {
   message: string;
 }
